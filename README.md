@@ -1,2 +1,2 @@
 # ABS-Front-End
-Lorenzo, Sabrina, João, Mateus, Lucas
+Lorenzo, Sabrina, João, Matheus, Lucas
