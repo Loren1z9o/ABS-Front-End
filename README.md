@@ -3,7 +3,7 @@ Lorenzo, Sabrina, João, Matheus, Lucas
 
 
 🥋 Projeto: FightZone
-📌 Descrição
+📌 
 A FightZone é um site voltado à divulgação, ensino e promoção das artes marciais, reunindo diversos estilos de luta em um único espaço digital. A plataforma tem como missão oferecer um ambiente atrativo, informativo e seguro para pessoas interessadas em aprender técnicas de defesa pessoal, melhorar o condicionamento físico e participar de uma comunidade disciplinada e respeitosa.
 
 Com professores experientes, uma agenda de torneios e premiações, e conteúdos educativos, o site visa democratizar o acesso às artes marciais e atrair tanto iniciantes quanto praticantes avançados.
