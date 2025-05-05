@@ -2,59 +2,54 @@
 Lorenzo, Sabrina, João, Matheus, Lucas
 
 
-🥋 Projeto: FightZone
-📌 
-A FightZone é um site voltado à divulgação, ensino e promoção das artes marciais, reunindo diversos estilos de luta em um único espaço digital. A plataforma tem como missão oferecer um ambiente atrativo, informativo e seguro para pessoas interessadas em aprender técnicas de defesa pessoal, melhorar o condicionamento físico e participar de uma comunidade disciplinada e respeitosa.
+🥋 FightZone
 
-Com professores experientes, uma agenda de torneios e premiações, e conteúdos educativos, o site visa democratizar o acesso às artes marciais e atrair tanto iniciantes quanto praticantes avançados.
+📄 Descrição
+Este projeto tem como proposta o desenvolvimento de um sistema web completo para o gerenciamento de uma academia de artes marciais. A plataforma visa facilitar o controle de acesso de alunos e professores, disponibilizar recursos visuais de apresentação, gerenciar turmas, horários e oferecer uma visão clara das atividades por meio de um dashboard intuitivo.
+
+O sistema contará inicialmente com uma tela de login moderna, exibindo saudações e mensagens adaptáveis à experiência do usuário, além de um painel administrativo com formulários para cadastro, edição e visualização de informações relevantes para a academia.
 
 🎯 Objetivo
-Promover diferentes estilos de artes marciais (karatê, jiu-jitsu, muay thai, kung fu, taekwondo, etc.).
+Oferecer um ambiente digital funcional e intuitivo para academias de artes marciais.
 
-Oferecer aulas com professores qualificados.
+Permitir acesso seguro com autenticação de usuários (alunos, professores e administradores).
 
-Realizar e divulgar torneios e eventos com premiações.
+Disponibilizar um dashboard de gestão com recursos interativos e formulários completos.
 
-Incentivar a defesa pessoal e a segurança individual.
+Melhorar a organização interna da academia, otimizando o cadastro de turmas, alunos, professores, horários e modalidades.
 
-Criar uma comunidade interativa e engajada no universo das artes marciais.
+Fornecer uma base escalável para futuras funcionalidades, como controle de mensalidades, agendamento de aulas e relatórios.
 
-Chamar a atenção de novos alunos por meio de um site moderno, visualmente atrativo e informativo.
+🧱 Estrutura do Sistema
+🔐 1. Tela de Login
+Interface amigável com campos de e-mail e senha.
 
-🧱 Estrutura do Site
-O site será dividido em seções claras e acessíveis, proporcionando uma experiência agradável ao usuário:
+Exibição de saudações personalizadas (ex: “Bem-vindo de volta, guerreiro!”) e mensagens de atenção ou “desapreço” (ex: “Você está com pendências, atualize seus dados!”).
 
-1. Página Inicial
-Destaques visuais com imagens e vídeos de treinos e torneios.
+Validação de credenciais com retorno de erros claros e acessíveis.
 
-Chamada para ação (CTA) para matricular-se ou conhecer os estilos.
+📊 2. Dashboard Principal
+Visão geral do sistema com informações rápidas (número de alunos, turmas ativas, eventos, etc.).
 
-2. Estilos Marciais
-Página dedicada a cada estilo (ex: Jiu-jitsu, Muay Thai, Karatê, etc.).
+Navegação intuitiva entre as seções.
 
-História, benefícios, faixas e vídeos demonstrativos.
+📝 3. Formulários e Funcionalidades
+Cadastro de Alunos: dados pessoais, faixa, estilo, turma.
 
-3. Professores
-Perfil de cada instrutor com foto, biografia, estilo ensinado e faixa atual.
+Cadastro de Professores: especialidades, horários, vínculo com turmas.
 
-Links para redes sociais e formas de contato.
+Cadastro de Modalidades: Karatê, Jiu-Jitsu, Muay Thai, entre outros.
 
-4. Aulas e Treinos
-Calendário com horários de aulas presenciais e online.
+Gestão de Turmas e Horários: alocação de alunos e professores.
 
-Informações sobre níveis (iniciante, intermediário, avançado).
+Mensagens e Alertas: exibir notificações relevantes (ex: eventos, pagamentos, ausências).
 
-5. Torneios
-Agenda de campeonatos.
+⚙️ 4. Futuras Expansões (planejadas)
+Controle de mensalidades e pagamentos.
 
-Resultados, premiações e fotos dos eventos.
+Sistema de avaliação de faixas e evolução dos alunos.
 
-6. Defesa Pessoal
-Conteúdo educativo sobre segurança pessoal, prevenção de conflitos e técnicas de autodefesa.
+Emissão de certificados e relatórios de rendimento.
 
-7. Inscrição / Contato
-Formulário de inscrição para novos alunos.
-
-Contato direto com a equipe do site para dúvidas e suporte.
-
+Agendamento e controle de torneios.
 
