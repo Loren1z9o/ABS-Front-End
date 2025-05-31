@@ -15,6 +15,7 @@
     <section class="info">
       <h2>Bem-vindo, <span id="nomeProfessor"></span></h2>
       <p>Aqui você pode visualizar os alunos cadastrados.</p>
+      <p>Modalidade: <span id="modalidadeProfessor"></span></p>
       <button onclick="excluirConta()">Excluir minha conta</button>
     </section>
     <section>
@@ -29,10 +30,25 @@
         <tbody id="listaAlunos"></tbody>
       </table>
     </section>
+     <h3>Cadastrar Nova Turma</h3>
+  <form id="formTurma">
+    <label for="nomeTurma">Nome da Turma</label>
+    <input type="text" id="nomeTurma" required>
+
+    <label for="modalidade">Modalidade</label>
+    <input type="text" id="modalidade" required>
+
+    <button type="submit">Cadastrar Turma</button>
+  </form>
+
+  <h4>Turmas Cadastradas</h4>
+  <ul id="listaTurmas"></ul>
+</section>
   </main>
   <script>
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
     document.getElementById('nomeProfessor').textContent = usuarioLogado?.nome || 'Professor';
+    document.getElementById('modalidadeProfessor').textContent = usuarioLogado?.modalidade || 'Não informada';
 
     function logout() {
       localStorage.removeItem('usuarioLogado');
@@ -67,6 +83,34 @@
     }
 
     carregarAlunos();
+    function salvarTurma(nomeTurma, modalidade) {
+  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+  turmas.push({ nomeTurma, modalidade });
+  localStorage.setItem('turmas', JSON.stringify(turmas));
+  listarTurmas();
+}
+
+function listarTurmas() {
+  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+  const lista = document.getElementById('listaTurmas');
+  lista.innerHTML = '';
+
+  turmas.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = `${t.nomeTurma} - ${t.modalidade}`;
+    lista.appendChild(li);
+  });
+}
+
+document.getElementById('formTurma').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nomeTurma = document.getElementById('nomeTurma').value;
+  const modalidade = document.getElementById('modalidade').value;
+  salvarTurma(nomeTurma, modalidade);
+  e.target.reset();
+});
+
+listarTurmas();
   </script>
 </body>
 </html>

@@ -48,10 +48,23 @@
 
       <label for="tipo">Tipo de Usuário</label>
       <select id="tipo" name="tipo" required>
+       
         <option value="aluno">Aluno</option>
         <option value="professor">Professor</option>
       </select>
-
+ <div id="modalidadeContainer" style="display: none;">
+  <label for="modalidade">Modalidade</label>
+  <select id="modalidade" name="modalidade" required>
+    <option value="">Selecione uma modalidade</option>
+    <option value="Karatê">Karatê</option>
+    <option value="Jiu-Jitsu">Jiu-Jitsu</option>
+    <option value="Muay Thai">Muay Thai</option>
+    <option value="Taekwondo">Taekwondo</option>
+    <option value="Boxe">Boxe</option>
+    <option value="Capoeira">Capoeira</option>
+  </select>
+</div>
+🔁 Isso sub
       <button type="submit">Cadastrar</button>
       <p id="mensagemCadastro"></p>
     </form>
@@ -63,11 +76,30 @@
     const mensagem = document.getElementById('mensagem');
     const mensagemCadastro = document.getElementById('mensagemCadastro');
 
-    function salvarUsuario(nome, email, senha, tipo) {
-      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-      usuarios.push({ nome, email, senha, tipo });
-      localStorage.setItem('usuarios', JSON.stringify(usuarios));
-    }
+   function salvarUsuario(nome, email, senha, tipo, modalidade = null) {
+  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+  const novoUsuario = { nome, email, senha, tipo };
+  if (tipo === 'professor') novoUsuario.modalidade = modalidade;
+  usuarios.push(novoUsuario);
+  localStorage.setItem('usuarios', JSON.stringify(usuarios));
+}
+     function validarCadastro(nome, email, senha, tipo) {
+  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+    
+  const emailExiste = usuarios.some(user => user.email === email);
+  if (emailExiste) {
+    mensagemCadastro.textContent = 'Este e-mail já está cadastrado.';
+    mensagemCadastro.style.color = 'red';
+    return false;
+  }
+  if (senha.length < 6) {
+  mensagemCadastro.textContent = 'Senha deve ter no mínimo 6 caracteres.';
+  mensagemCadastro.style.color = 'red';
+  return;
+}
+
+  return true;
+}
 
     function autenticarUsuario(email, senha) {
       const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
@@ -104,8 +136,9 @@
       const email = cadastroForm.emailCadastro.value;
       const senha = cadastroForm.senhaCadastro.value;
       const tipo = cadastroForm.tipo.value;
+      const modalidade = tipo === 'professor' ? cadastroForm.modalidade.value : null;
 
-      salvarUsuario(nome, email, senha, tipo);
+      salvarUsuario(nome, email, senha, tipo, modalidade);
       mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Faça login para continuar.';
       mensagemCadastro.style.color = 'green';
 
@@ -119,6 +152,16 @@
       document.querySelector('.login-container').style.display = 'none';
       document.getElementById('cadastroContainer').style.display = 'block';
     }
+    const tipoSelect = document.getElementById('tipo');
+const modalidadeContainer = document.getElementById('modalidadeContainer');
+
+tipoSelect.addEventListener('change', () => {
+  if (tipoSelect.value === 'professor') {
+    modalidadeContainer.style.display = 'block';
+  } else {
+    modalidadeContainer.style.display = 'none';
+  }
+});
   </script>
 </body>
 </html>
