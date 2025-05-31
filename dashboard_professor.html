@@ -81,12 +81,7 @@
     }
 
     carregarAlunos();
-    function salvarTurma(nomeTurma, modalidade) {
-  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-  turmas.push({ nomeTurma, modalidade });
-  localStorage.setItem('turmas', JSON.stringify(turmas));
-  listarTurmas();
-}
+ 
 
 function salvarTurma(nomeTurma, modalidade) {
   const turmas = JSON.parse(localStorage.getItem('turmas')) || [];

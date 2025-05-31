@@ -55,7 +55,8 @@
   <script>
     // Função para carregar alunos e agrupá-los por turma
     function carregarAlunos() {
-      const alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      const alunos = usuarios.filter(u => u.tipo === 'aluno');
       const turmas = {};
 
       alunos.forEach(aluno => {

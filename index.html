@@ -54,7 +54,7 @@
       </select>
  <div id="modalidadeContainer" style="display: none;">
   <label for="modalidade">Modalidade</label>
-  <select id="modalidade" name="modalidade" required>
+  <select id="modalidade" name="modalidade" >
     <option value="">Selecione uma modalidade</option>
     <option value="Karatê">Karatê</option>
     <option value="Jiu-Jitsu">Jiu-Jitsu</option>
@@ -64,7 +64,7 @@
     <option value="Capoeira">Capoeira</option>
   </select>
 </div>
-🔁 Isso sub
+
       <button type="submit">Cadastrar</button>
       <p id="mensagemCadastro"></p>
     </form>
@@ -82,23 +82,6 @@
   if (tipo === 'professor') novoUsuario.modalidade = modalidade;
   usuarios.push(novoUsuario);
   localStorage.setItem('usuarios', JSON.stringify(usuarios));
-}
-     function validarCadastro(nome, email, senha, tipo) {
-  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-    
-  const emailExiste = usuarios.some(user => user.email === email);
-  if (emailExiste) {
-    mensagemCadastro.textContent = 'Este e-mail já está cadastrado.';
-    mensagemCadastro.style.color = 'red';
-    return false;
-  }
-  if (senha.length < 6) {
-  mensagemCadastro.textContent = 'Senha deve ter no mínimo 6 caracteres.';
-  mensagemCadastro.style.color = 'red';
-  return;
-}
-
-  return true;
 }
 
     function autenticarUsuario(email, senha) {
@@ -130,23 +113,50 @@
     });
 
     cadastroForm.addEventListener('submit', (e) => {
-      e.preventDefault();
+  e.preventDefault();
 
-      const nome = cadastroForm.nome.value;
-      const email = cadastroForm.emailCadastro.value;
-      const senha = cadastroForm.senhaCadastro.value;
-      const tipo = cadastroForm.tipo.value;
-      const modalidade = tipo === 'professor' ? cadastroForm.modalidade.value : null;
+  const nome   = cadastroForm.nome.value;
+  const email  = cadastroForm.emailCadastro.value;
+  const senha  = cadastroForm.senhaCadastro.value;
+  const tipo   = cadastroForm.tipo.value;
+  const modalidade = tipo === 'professor' ? cadastroForm.modalidade.value : null;
 
-      salvarUsuario(nome, email, senha, tipo, modalidade);
-      mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Faça login para continuar.';
-      mensagemCadastro.style.color = 'green';
+  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
 
-      setTimeout(() => {
-        document.getElementById('cadastroContainer').style.display = 'none';
-        document.querySelector('.login-container').style.display = 'block';
-      }, 2000);
-    });
+  const emailExiste = usuarios.some(u => u.email === email);
+  if (emailExiste) {
+    mensagemCadastro.textContent = 'Este e-mail já está cadastrado.';
+    mensagemCadastro.style.color = 'red';
+    return;
+  }
+
+  if (senha.length < 6) {
+    mensagemCadastro.textContent = 'Senha deve ter no mínimo 6 caracteres.';
+    mensagemCadastro.style.color = 'red';
+    return;
+  }
+
+  if (tipo === 'professor' && (!modalidade || modalidade === '')) {
+    mensagemCadastro.textContent = 'Selecione uma modalidade.';
+    mensagemCadastro.style.color = 'red';
+    return;
+  }
+
+  const novoUsuario = { nome, email, senha, tipo };
+  if (tipo === 'professor') novoUsuario.modalidade = modalidade;
+
+  usuarios.push(novoUsuario);
+  localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+  mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Faça login para continuar.';
+  mensagemCadastro.style.color = 'green';
+
+  setTimeout(() => {
+    document.getElementById('cadastroContainer').style.display = 'none';
+    document.querySelector('.login-container').style.display = 'block';
+    cadastroForm.reset();
+  }, 2000);
+});
 
     function mostrarCadastro() {
       document.querySelector('.login-container').style.display = 'none';
