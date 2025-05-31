@@ -35,8 +35,6 @@
     <label for="nomeTurma">Nome da Turma</label>
     <input type="text" id="nomeTurma" required>
 
-    <label for="modalidade">Modalidade</label>
-    <input type="text" id="modalidade" required>
 
     <button type="submit">Cadastrar Turma</button>
   </form>
@@ -90,22 +88,52 @@
   listarTurmas();
 }
 
+function salvarTurma(nomeTurma, modalidade) {
+  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+  turmas.push({ nomeTurma: String(nomeTurma), modalidade: String(modalidade) });
+  localStorage.setItem('turmas', JSON.stringify(turmas));
+  listarTurmas();
+}
+
 function listarTurmas() {
   const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
   const lista = document.getElementById('listaTurmas');
   lista.innerHTML = '';
 
-  turmas.forEach(t => {
+  turmas.forEach((t, index) => {
     const li = document.createElement('li');
     li.textContent = `${t.nomeTurma} - ${t.modalidade}`;
+
+    const botaoExcluir = document.createElement('button');
+    botaoExcluir.textContent = 'Excluir';
+    botaoExcluir.style.marginLeft = '10px';
+    botaoExcluir.style.backgroundColor = '#C0392B';
+    botaoExcluir.style.color = 'white';
+    botaoExcluir.style.border = 'none';
+    botaoExcluir.style.padding = '5px 10px';
+    botaoExcluir.style.borderRadius = '5px';
+    botaoExcluir.style.cursor = 'pointer';
+
+    botaoExcluir.addEventListener('click', () => {
+      excluirTurma(index);
+    });
+
+    li.appendChild(botaoExcluir);
     lista.appendChild(li);
   });
 }
-
+function excluirTurma(index) {
+  let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+  if (confirm(`Deseja realmente excluir a turma "${turmas[index].nomeTurma}"?`)) {
+    turmas.splice(index, 1);  // Remove 1 item na posição "index"
+    localStorage.setItem('turmas', JSON.stringify(turmas));
+    listarTurmas(); // Atualiza a lista na tela
+  }
+}
 document.getElementById('formTurma').addEventListener('submit', (e) => {
   e.preventDefault();
   const nomeTurma = document.getElementById('nomeTurma').value;
-  const modalidade = document.getElementById('modalidade').value;
+  const modalidade = usuarioLogado?.modalidade || 'Não definida';
   salvarTurma(nomeTurma, modalidade);
   e.target.reset();
 });
