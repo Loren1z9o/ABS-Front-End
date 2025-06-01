@@ -1,5 +1,5 @@
 # FightZone
-Lorenzo, Sabrina, João, Matheus, Lucas
+Lorenzo, Sabrina, João, Lucas
 
 
 🥋 FightZone
