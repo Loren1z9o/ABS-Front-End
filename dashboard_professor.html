@@ -39,7 +39,11 @@
   <input type="time" id="horarioTurma" required>
     <button type="submit">Cadastrar Turma</button>
   </form>
-
+<h3>Anotações da Turma</h3>
+<select id="turmaSelecionada"></select>
+<textarea id="anotacaoTexto" rows="4" placeholder="Digite a anotação..."></textarea>
+<button onclick="salvarAnotacao()">Salvar Anotação</button>
+<p id="anotacaoStatus"></p>
   <h4>Turmas Cadastradas</h4>
   <ul id="listaTurmas"></ul>
 </section>
@@ -117,6 +121,16 @@ function listarTurmas() {
     li.appendChild(botaoExcluir);
     lista.appendChild(li);
   });
+  const select = document.getElementById('turmaSelecionada');
+if (select) {
+  select.innerHTML = '';
+  turmas.forEach(turma => {
+    const option = document.createElement('option');
+    option.value = turma.nomeTurma;
+    option.textContent = turma.nomeTurma;
+    select.appendChild(option);
+  });
+ }
 }
 function excluirTurma(index) {
   let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
@@ -125,6 +139,24 @@ function excluirTurma(index) {
     localStorage.setItem('turmas', JSON.stringify(turmas));
     listarTurmas(); // Atualiza a lista na tela
   }
+}
+function salvarAnotacao() {
+  const turma = document.getElementById('turmaSelecionada').value;
+  const texto = document.getElementById('anotacaoTexto').value.trim();
+
+  if (!turma || !texto) {
+    document.getElementById('anotacaoStatus').textContent = 'Selecione uma turma e escreva algo.';
+    return;
+  }
+
+  const anotacoes = JSON.parse(localStorage.getItem('anotacoesTurmas')) || {};
+  anotacoes[turma] = texto;
+  localStorage.setItem('anotacoesTurmas', JSON.stringify(anotacoes));
+
+  document.getElementById('anotacaoStatus').textContent = 'Anotação salva com sucesso!';
+  setTimeout(() => {
+    document.getElementById('anotacaoStatus').textContent = '';
+  }, 2000);
 }
 document.getElementById('formTurma').addEventListener('submit', (e) => {
   e.preventDefault();
