@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastro de Aluno</title>
+  <title>Cadastro de Usuário</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    #modalidadeContainer {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <div class="cadastro-container">
@@ -27,12 +32,36 @@
         <option value="professor">Professor</option>
       </select>
 
+      <div id="modalidadeContainer">
+        <label for="modalidade">Modalidade</label>
+        <select id="modalidade" name="modalidade">
+          <option value="">Selecione uma modalidade</option>
+          <option value="Karatê">Karatê</option>
+          <option value="Jiu-Jitsu">Jiu-Jitsu</option>
+          <option value="Muay Thai">Muay Thai</option>
+          <option value="Taekwondo">Taekwondo</option>
+          <option value="Boxe">Boxe</option>
+          <option value="Capoeira">Capoeira</option>
+        </select>
+      </div>
+
       <button type="submit">Cadastrar</button>
     </form>
   </div>
 
   <script>
     const cadastroForm = document.getElementById('cadastroForm');
+    const tipoSelect = document.getElementById('tipo');
+    const modalidadeContainer = document.getElementById('modalidadeContainer');
+
+    // Exibe ou oculta o campo "modalidade" dependendo do tipo
+    tipoSelect.addEventListener('change', () => {
+      if (tipoSelect.value === 'professor') {
+        modalidadeContainer.style.display = 'block';
+      } else {
+        modalidadeContainer.style.display = 'none';
+      }
+    });
 
     cadastroForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -41,9 +70,15 @@
       const email = document.getElementById('email').value.trim();
       const senha = document.getElementById('senha').value.trim();
       const tipo = document.getElementById('tipo').value;
+      const modalidade = document.getElementById('modalidade').value;
 
       if (senha.length < 6) {
         alert('A senha deve ter no mínimo 6 caracteres.');
+        return;
+      }
+
+      if (tipo === 'professor' && (!modalidade || modalidade === '')) {
+        alert('Selecione uma modalidade para professor.');
         return;
       }
 
@@ -56,13 +91,16 @@
       }
 
       const novoUsuario = { nome, email, senha, tipo };
+      if (tipo === 'professor') {
+        novoUsuario.modalidade = modalidade;
+      }
+
       usuarios.push(novoUsuario);
       localStorage.setItem('usuarios', JSON.stringify(usuarios));
 
       alert('Cadastro realizado com sucesso!');
-      window.location.href = 'index.html'; 
+      window.location.href = 'index.html'; // Redireciona para a tela de login
     });
   </script>
 </body>
 </html>
-
