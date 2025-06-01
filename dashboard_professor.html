@@ -20,7 +20,6 @@
     </section>
     <section>
       <h3>Alunos Cadastrados</h3>
-       <input type="text" id="filtroAluno" placeholder="Buscar aluno por nome" oninput="filtrarAlunos()" />
       <table>
         <thead>
           <tr>
@@ -31,37 +30,27 @@
         <tbody id="listaAlunos"></tbody>
       </table>
     </section>
-     <h3>Cadastrar Nova Turma</h3>
-  <form id="formTurma">
-    <label for="nomeTurma">Nome da Turma</label>
-    <input type="text" id="nomeTurma" required>
 
- <label for="horarioTurma">Horário</label>
-  <input type="time" id="horarioTurma" required>
-    <button type="submit">Cadastrar Turma</button>
-  </form>
-<h3>Anotações da Turma</h3>
-<select id="turmaSelecionada"></select>
-<textarea id="anotacaoTexto" rows="4" placeholder="Digite a anotação..."></textarea>
-<button onclick="salvarAnotacao()">Salvar Anotação</button>
-<p id="anotacaoStatus"></p>
+    <section>
+      <h3>Cadastrar Nova Turma</h3>
+      <form id="formTurma">
+        <label for="nomeTurma">Nome da Turma</label>
+        <input type="text" id="nomeTurma" required>
 
-<h4>Chamada</h4>
-<select id="turmaParaChamada"></select>
-<button onclick="carregarChamada()">Carregar Alunos</button>
-<form id="formChamada" style="margin-top: 10px;">
-  <div id="listaAlunosChamada"></div>
-  <button type="submit">Salvar Presença</button>
-</form>
-<p id="statusChamada"></p>
+        <label for="horarioTurma">Horário de Início</label>
+        <input type="time" id="horarioInicio" required>
 
-<h4>Histórico de Presença</h4>
-<ul id="historicoPresenca"></ul>
+        <label for="horarioFim">Horário de Fim</label>
+        <input type="time" id="horarioFim" required>
 
-  <h4>Turmas Cadastradas</h4>
-  <ul id="listaTurmas"></ul>
-</section>
+        <button type="submit">Cadastrar Turma</button>
+      </form>
+    </section>
+
+    <h3>Turmas Cadastradas</h3>
+    <ul id="listaTurmas"></ul>
   </main>
+  
   <script>
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
     document.getElementById('nomeProfessor').textContent = usuarioLogado?.nome || 'Professor';
@@ -84,7 +73,7 @@
 
       alunos.forEach(aluno => {
         const row = document.createElement('tr');
-        row.innerHTML = `<td>${aluno.nome}</td> <td>${aluno.email}</td> <td><button onclick="mostrarPresenca('${aluno.email}')">Ver Presença</button></td>`;
+        row.innerHTML = `<td>${aluno.nome}</td><td>${aluno.email}</td>`;
         lista.appendChild(row);
       });
     }
@@ -99,175 +88,62 @@
       }
     }
 
-    carregarAlunos();
- function filtrarAlunos() {
-  const filtro = document.getElementById('filtroAluno').value.toLowerCase();
-  const linhas = document.querySelectorAll('#listaAlunos tr');
+    function salvarTurma(nomeTurma, modalidade, horarioInicio, horarioFim) {
+      const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+      turmas.push({ nomeTurma, modalidade, horarioInicio, horarioFim });
+      localStorage.setItem('turmas', JSON.stringify(turmas));
+      listarTurmas();
+    }
 
-  linhas.forEach(linha => {
-    const nome = linha.querySelector('td')?.textContent?.toLowerCase() || '';
-    linha.style.display = nome.includes(filtro) ? '' : 'none';
-  });
-}
+    function listarTurmas() {
+      const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+      const lista = document.getElementById('listaTurmas');
+      lista.innerHTML = '';
 
-function salvarTurma(nomeTurma, modalidade, horario) {
-  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-  turmas.push({ nomeTurma: String(nomeTurma), modalidade: String(modalidade), horario});
-  localStorage.setItem('turmas', JSON.stringify(turmas));
-  listarTurmas();
-}
+      turmas.forEach((t, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${t.nomeTurma} - ${t.modalidade} - ${t.horarioInicio} às ${t.horarioFim}`;
 
-function listarTurmas() {
-  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-  const lista = document.getElementById('listaTurmas');
-  lista.innerHTML = '';
+        const botaoExcluir = document.createElement('button');
+        botaoExcluir.textContent = 'Excluir';
+        botaoExcluir.style.marginLeft = '10px';
+        botaoExcluir.style.backgroundColor = '#C0392B';
+        botaoExcluir.style.color = 'white';
+        botaoExcluir.style.border = 'none';
+        botaoExcluir.style.padding = '5px 10px';
+        botaoExcluir.style.borderRadius = '5px';
+        botaoExcluir.style.cursor = 'pointer';
 
-  turmas.forEach((t, index) => {
-    const li = document.createElement('li');
-    li.textContent = `${t.nomeTurma} - ${t.modalidade} - ${t.horario}`;
+        botaoExcluir.addEventListener('click', () => {
+          excluirTurma(index);
+        });
 
-    const botaoExcluir = document.createElement('button');
-    botaoExcluir.textContent = 'Excluir';
-    botaoExcluir.style.marginLeft = '10px';
-    botaoExcluir.style.backgroundColor = '#C0392B';
-    botaoExcluir.style.color = 'white';
-    botaoExcluir.style.border = 'none';
-    botaoExcluir.style.padding = '5px 10px';
-    botaoExcluir.style.borderRadius = '5px';
-    botaoExcluir.style.cursor = 'pointer';
+        li.appendChild(botaoExcluir);
+        lista.appendChild(li);
+      });
+    }
 
-    botaoExcluir.addEventListener('click', () => {
-      excluirTurma(index);
-    });
-
-    li.appendChild(botaoExcluir);
-    lista.appendChild(li);
-  });
-  const select = document.getElementById('turmaSelecionada');
-if (select) {
-  select.innerHTML = '';
-  turmas.forEach(turma => {
-    const option = document.createElement('option');
-    option.value = turma.nomeTurma;
-    option.textContent = turma.nomeTurma;
-    select.appendChild(option);
-  });
- }
- const selectChamada = document.getElementById('turmaParaChamada');
-if (selectChamada) {
-  selectChamada.innerHTML = '';
-  turmas.forEach(turma => {
-    const option = document.createElement('option');
-    option.value = turma.nomeTurma;
-    option.textContent = turma.nomeTurma;
-    selectChamada.appendChild(option);
-  });
-}
-}
-function excluirTurma(index) {
-  let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-  if (confirm(`Deseja realmente excluir a turma "${turmas[index].nomeTurma}"?`)) {
-    turmas.splice(index, 1);  // Remove 1 item na posição "index"
-    localStorage.setItem('turmas', JSON.stringify(turmas));
-    listarTurmas(); // Atualiza a lista na tela
-  }
-}
-
-function carregarChamada() {
-  const turma = document.getElementById('turmaParaChamada').value;
-  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-  const alunos = usuarios.filter(u => u.tipo === 'aluno' && u.turma === turma);
-  const lista = document.getElementById('listaAlunosChamada');
-  lista.innerHTML = '';
-
-  if (alunos.length === 0) {
-    lista.innerHTML = '<p>Nenhum aluno nesta turma.</p>';
-    return;
-  }
-
-  alunos.forEach(aluno => {
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <label>
-        <input type="checkbox" name="presenca" value="${aluno.email}" />
-        ${aluno.nome}
-      </label>
-    `;
-    lista.appendChild(div);
-  });
-}
-
-function mostrarPresenca(emailAluno) {
-  const chamadas = JSON.parse(localStorage.getItem('chamadas')) || {};
-  const historico = [];
-
-  for (const turma in chamadas) {
-    for (const data in chamadas[turma]) {
-      if (chamadas[turma][data].includes(emailAluno)) {
-        historico.push(`${turma} - ${data}`);
+    function excluirTurma(index) {
+      let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+      if (confirm(`Deseja realmente excluir a turma "${turmas[index].nomeTurma}"?`)) {
+        turmas.splice(index, 1);
+        localStorage.setItem('turmas', JSON.stringify(turmas));
+        listarTurmas();
       }
-  }
-  }
+    }
 
-  const ul = document.getElementById('historicoPresenca');
-  ul.innerHTML = '';
-
-  if (historico.length === 0) {
-    ul.innerHTML = '<li>Sem presença registrada.</li>';
-  } else {
-    historico.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = item;
-      ul.appendChild(li);
+    document.getElementById('formTurma').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nomeTurma = document.getElementById('nomeTurma').value;
+      const horarioInicio = document.getElementById('horarioInicio').value;
+      const horarioFim = document.getElementById('horarioFim').value;
+      const modalidade = usuarioLogado?.modalidade || 'Não definida';
+      salvarTurma(nomeTurma, modalidade, horarioInicio, horarioFim);
+      e.target.reset();
     });
-  }
-}
 
-function salvarAnotacao() {
-  const turma = document.getElementById('turmaSelecionada').value;
-  const texto = document.getElementById('anotacaoTexto').value.trim();
-
-  if (!turma || !texto) {
-    document.getElementById('anotacaoStatus').textContent = 'Selecione uma turma e escreva algo.';
-    return;
-  }
-
-  const anotacoes = JSON.parse(localStorage.getItem('anotacoesTurmas')) || {};
-  anotacoes[turma] = texto;
-  localStorage.setItem('anotacoesTurmas', JSON.stringify(anotacoes));
-
-  document.getElementById('anotacaoStatus').textContent = 'Anotação salva com sucesso!';
-  setTimeout(() => {
-    document.getElementById('anotacaoStatus').textContent = '';
-  }, 2000);
-}
-document.getElementById('formTurma').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const nomeTurma = document.getElementById('nomeTurma').value;
-  const horario = document.getElementById('horarioTurma').value;
-  const modalidade = usuarioLogado?.modalidade || 'Não definida';
-  salvarTurma(nomeTurma, modalidade, horario);
-  e.target.reset();
-});
-
-listarTurmas();
-
-document.getElementById('formChamada').addEventListener('submit', function(e) {
-  e.preventDefault();
-
-  const turma = document.getElementById('turmaParaChamada').value;
-  const presentes = Array.from(document.querySelectorAll('input[name="presenca"]:checked'))
-                        .map(el => el.value);
-  const hoje = new Date().toLocaleDateString('pt-BR');
-  const chamadas = JSON.parse(localStorage.getItem('chamadas')) || {};
-
-  if (!chamadas[turma]) chamadas[turma] = {};
-  chamadas[turma][hoje] = presentes;
-
-  localStorage.setItem('chamadas', JSON.stringify(chamadas));
-  document.getElementById('statusChamada').textContent = 'Chamada salva com sucesso!';
-  setTimeout(() => document.getElementById('statusChamada').textContent = '', 2000);
-});
+    carregarAlunos();
+    listarTurmas();
   </script>
 </body>
 </html>
