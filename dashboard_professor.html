@@ -55,6 +55,9 @@
 </form>
 <p id="statusChamada"></p>
 
+<h4>Histórico de Presença</h4>
+<ul id="historicoPresenca"></ul>
+
   <h4>Turmas Cadastradas</h4>
   <ul id="listaTurmas"></ul>
 </section>
@@ -81,7 +84,7 @@
 
       alunos.forEach(aluno => {
         const row = document.createElement('tr');
-        row.innerHTML = `<td>${aluno.nome}</td><td>${aluno.email}</td>`;
+        row.innerHTML = `<td>${aluno.nome}</td> <td>${aluno.email}</td> <td><button onclick="mostrarPresenca('${aluno.email}')">Ver Presença</button></td>`;
         lista.appendChild(row);
       });
     }
@@ -192,6 +195,32 @@ function carregarChamada() {
     `;
     lista.appendChild(div);
   });
+}
+
+function mostrarPresenca(emailAluno) {
+  const chamadas = JSON.parse(localStorage.getItem('chamadas')) || {};
+  const historico = [];
+
+  for (const turma in chamadas) {
+    for (const data in chamadas[turma]) {
+      if (chamadas[turma][data].includes(emailAluno)) {
+        historico.push(`${turma} - ${data}`);
+      }
+  }
+  }
+
+  const ul = document.getElementById('historicoPresenca');
+  ul.innerHTML = '';
+
+  if (historico.length === 0) {
+    ul.innerHTML = '<li>Sem presença registrada.</li>';
+  } else {
+    historico.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+  }
 }
 
 function salvarAnotacao() {
