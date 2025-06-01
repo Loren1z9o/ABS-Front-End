@@ -44,6 +44,16 @@
 <textarea id="anotacaoTexto" rows="4" placeholder="Digite a anotação..."></textarea>
 <button onclick="salvarAnotacao()">Salvar Anotação</button>
 <p id="anotacaoStatus"></p>
+
+<h4>Chamada</h4>
+<select id="turmaParaChamada"></select>
+<button onclick="carregarChamada()">Carregar Alunos</button>
+<form id="formChamada" style="margin-top: 10px;">
+  <div id="listaAlunosChamada"></div>
+  <button type="submit">Salvar Presença</button>
+</form>
+<p id="statusChamada"></p>
+
   <h4>Turmas Cadastradas</h4>
   <ul id="listaTurmas"></ul>
 </section>
@@ -131,6 +141,16 @@ if (select) {
     select.appendChild(option);
   });
  }
+ const selectChamada = document.getElementById('turmaParaChamada');
+if (selectChamada) {
+  selectChamada.innerHTML = '';
+  turmas.forEach(turma => {
+    const option = document.createElement('option');
+    option.value = turma.nomeTurma;
+    option.textContent = turma.nomeTurma;
+    selectChamada.appendChild(option);
+  });
+}
 }
 function excluirTurma(index) {
   let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
@@ -140,6 +160,31 @@ function excluirTurma(index) {
     listarTurmas(); // Atualiza a lista na tela
   }
 }
+
+function carregarChamada() {
+  const turma = document.getElementById('turmaParaChamada').value;
+  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+  const alunos = usuarios.filter(u => u.tipo === 'aluno' && u.turma === turma);
+  const lista = document.getElementById('listaAlunosChamada');
+  lista.innerHTML = '';
+
+  if (alunos.length === 0) {
+    lista.innerHTML = '<p>Nenhum aluno nesta turma.</p>';
+    return;
+  }
+
+  alunos.forEach(aluno => {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" name="presenca" value="${aluno.email}" />
+        ${aluno.nome}
+      </label>
+    `;
+    lista.appendChild(div);
+  });
+}
+
 function salvarAnotacao() {
   const turma = document.getElementById('turmaSelecionada').value;
   const texto = document.getElementById('anotacaoTexto').value.trim();
@@ -168,6 +213,23 @@ document.getElementById('formTurma').addEventListener('submit', (e) => {
 });
 
 listarTurmas();
+
+document.getElementById('formChamada').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const turma = document.getElementById('turmaParaChamada').value;
+  const presentes = Array.from(document.querySelectorAll('input[name="presenca"]:checked'))
+                        .map(el => el.value);
+  const hoje = new Date().toLocaleDateString('pt-BR');
+  const chamadas = JSON.parse(localStorage.getItem('chamadas')) || {};
+
+  if (!chamadas[turma]) chamadas[turma] = {};
+  chamadas[turma][hoje] = presentes;
+
+  localStorage.setItem('chamadas', JSON.stringify(chamadas));
+  document.getElementById('statusChamada').textContent = 'Chamada salva com sucesso!';
+  setTimeout(() => document.getElementById('statusChamada').textContent = '', 2000);
+});
   </script>
 </body>
 </html>
