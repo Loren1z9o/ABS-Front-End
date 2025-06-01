@@ -40,6 +40,11 @@
       </form>
       <div id="mensagemLimite" style="color:red; margin-top: 5px;"></div>
     </section>
+    <section class="turmas-disponiveis">
+  <h3>Turmas Disponíveis</h3>
+  <ul id="listaTurmasDisponiveis"></ul>
+</section>
+
 
     <section>
       <button onclick="contatarProfessor()">Entrar em contato com o professor</button>
@@ -52,10 +57,10 @@
 
   <script>
     const horariosArtes = {
-      'Jiu-Jitsu': { professor: 'Professor Carlos' },
-      'Muay Thai': { professor: 'Professor Ana' },
-      'Karatê': { professor: 'Professor Roberto' },
-      'Boxe': { professor: 'Professor Paulo' },
+      'Jiu-Jitsu': { professor: 'Professor(a) de Jiu-Jitsu' },
+      'Muay Thai': { professor: 'Professor(a) de Muay Thai' },
+      'Karatê': { professor: 'Professor(a) de Karatê' },
+      'Boxe': { professor: 'Professor(a) de Boxe' },
     };
 
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
@@ -69,6 +74,37 @@
         if (artesSalvas.includes(chk.value)) chk.checked = true;
       });
     };
+    
+function carregarTurmasDisponiveis() {
+  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+  const lista = document.getElementById('listaTurmasDisponiveis');
+  lista.innerHTML = '';
+
+  if (turmas.length === 0) {
+    lista.innerHTML = '<li>Nenhuma turma cadastrada.</li>';
+    return;
+  }
+
+  turmas.forEach(turma => {
+    const item = document.createElement('li');
+    item.innerHTML = `
+      <strong>Turma de ${turma.modalidade}</strong><br>
+      Nome: ${turma.nomeTurma}<br>
+      Horário: ${turma.horarioInicio} às ${turma.horarioFim}
+    `;
+    lista.appendChild(item);
+  });
+}
+
+window.onload = () => {
+  const checkboxes = document.querySelectorAll('input[name="arte"]');
+  checkboxes.forEach(chk => {
+    if (artesSalvas.includes(chk.value)) chk.checked = true;
+  });
+
+  carregarTurmasDisponiveis(); // <- Adiciona isso aqui
+};
+
 
     document.getElementById('formArtes').addEventListener('change', () => {
       const selecionados = document.querySelectorAll('input[name="arte"]:checked');
