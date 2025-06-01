@@ -20,6 +20,7 @@
     </section>
     <section>
       <h3>Alunos Cadastrados</h3>
+       <input type="text" id="filtroAluno" placeholder="Buscar aluno por nome" oninput="filtrarAlunos()" />
       <table>
         <thead>
           <tr>
@@ -96,7 +97,15 @@
     }
 
     carregarAlunos();
- 
+ function filtrarAlunos() {
+  const filtro = document.getElementById('filtroAluno').value.toLowerCase();
+  const linhas = document.querySelectorAll('#listaAlunos tr');
+
+  linhas.forEach(linha => {
+    const nome = linha.querySelector('td')?.textContent?.toLowerCase() || '';
+    linha.style.display = nome.includes(filtro) ? '' : 'none';
+  });
+}
 
 function salvarTurma(nomeTurma, modalidade, horario) {
   const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
