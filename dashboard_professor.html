@@ -35,7 +35,8 @@
     <label for="nomeTurma">Nome da Turma</label>
     <input type="text" id="nomeTurma" required>
 
-
+ <label for="horarioTurma">Horário</label>
+  <input type="time" id="horarioTurma" required>
     <button type="submit">Cadastrar Turma</button>
   </form>
 
@@ -83,9 +84,9 @@
     carregarAlunos();
  
 
-function salvarTurma(nomeTurma, modalidade) {
+function salvarTurma(nomeTurma, modalidade, horario) {
   const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-  turmas.push({ nomeTurma: String(nomeTurma), modalidade: String(modalidade) });
+  turmas.push({ nomeTurma: String(nomeTurma), modalidade: String(modalidade), horario});
   localStorage.setItem('turmas', JSON.stringify(turmas));
   listarTurmas();
 }
@@ -97,7 +98,7 @@ function listarTurmas() {
 
   turmas.forEach((t, index) => {
     const li = document.createElement('li');
-    li.textContent = `${t.nomeTurma} - ${t.modalidade}`;
+    li.textContent = `${t.nomeTurma} - ${t.modalidade} - ${t.horario}`;
 
     const botaoExcluir = document.createElement('button');
     botaoExcluir.textContent = 'Excluir';
@@ -128,8 +129,9 @@ function excluirTurma(index) {
 document.getElementById('formTurma').addEventListener('submit', (e) => {
   e.preventDefault();
   const nomeTurma = document.getElementById('nomeTurma').value;
+  const horario = document.getElementById('horarioTurma').value;
   const modalidade = usuarioLogado?.modalidade || 'Não definida';
-  salvarTurma(nomeTurma, modalidade);
+  salvarTurma(nomeTurma, modalidade, horario);
   e.target.reset();
 });
 
