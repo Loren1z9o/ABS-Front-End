@@ -1,12 +1,47 @@
-# React + Vite
+🥋 FightZone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Grupo de Criadores: Lorenzo, João Gustavo, Lucas, Sabrina
 
-Currently, two official plugins are available:
+📄 Descrição Este projeto tem como proposta o desenvolvimento de um sistema web completo para o gerenciamento de uma academia de artes marciais. A plataforma visa facilitar o controle de acesso de alunos e professores, disponibilizar recursos visuais de apresentação, gerenciar turmas, horários e oferecer uma visão clara das atividades por meio de um dashboard intuitivo.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+O sistema contará inicialmente com uma tela de login moderna, exibindo saudações e mensagens adaptáveis à experiência do usuário, além de um painel administrativo com formulários para cadastro, edição e visualização de informações relevantes para a academia.
 
-## Expanding the ESLint configuration
+🎯 Objetivo Oferecer um ambiente digital funcional e intuitivo para academias de artes marciais.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Permitir acesso seguro com autenticação de usuários (alunos, professores e administradores).
+
+Disponibilizar um dashboard de gestão com recursos interativos e formulários completos.
+
+Melhorar a organização interna da academia, otimizando o cadastro de turmas, alunos, professores, horários e modalidades.
+
+Fornecer uma base escalável para futuras funcionalidades, como controle de mensalidades, agendamento de aulas e relatórios.
+
+🧱 Estrutura do Sistema 🔐 1. Tela de Login Interface amigável com campos de e-mail e senha.
+
+Exibição de saudações personalizadas (ex: “Bem-vindo de volta, guerreiro!”) e mensagens de atenção ou “desapreço” (ex: “Você está com pendências, atualize seus dados!”).
+
+Validação de credenciais com retorno de erros claros e acessíveis.
+
+📊 2. Dashboard Principal Visão geral do sistema com informações rápidas (número de alunos, turmas ativas, eventos, etc.).
+
+Navegação intuitiva entre as seções.
+
+📝 3. Formulários e Funcionalidades Cadastro de Alunos: dados pessoais, faixa, estilo, turma.
+
+Cadastro de Professores: especialidades, horários, vínculo com turmas.
+
+Cadastro de Modalidades: Karatê, Jiu-Jitsu, Muay Thai, entre outros.
+
+Gestão de Turmas e Horários: alocação de alunos e professores.
+
+Mensagens e Alertas: exibir notificações relevantes (ex: eventos, pagamentos, ausências).
+
+⚙️ 4. Futuras Expansões (planejadas) Controle de mensalidades e pagamentos.
+
+Sistema de avaliação de faixas e evolução dos alunos.
+
+Emissão de certificados e relatórios de rendimento.
+
+Agendamento e controle de torneios.
+
+Feito em React - Vitejs
