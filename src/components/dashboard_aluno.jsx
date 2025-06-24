@@ -7,6 +7,7 @@ function DashboardAluno({ usuarioLogado, setUsuarioLogado }) {
   const [artesSelecionadas, setArtesSelecionadas] = useState([]);
   const [turmas, setTurmas] = useState([]);
   const [mensagemLimite, setMensagemLimite] = useState('');
+  const [modalidadeFiltro, setModalidadeFiltro] = useState('');
   const navigate = useNavigate();
 
   const artesMarciais = ['Jiu-Jitsu', 'Muay Thai', 'Karatê', 'Boxe'];
@@ -57,6 +58,24 @@ function DashboardAluno({ usuarioLogado, setUsuarioLogado }) {
     alert('Artes marciais salvas!');
   };
 
+  const inscreverNaTurma = (index) => {
+    const turma = turmas[index];
+
+    if (turma.alunos?.includes(usuarioLogado.email)) {
+      alert('Você já está inscrito nesta turma.');
+      return;
+    }
+
+    const novasTurmas = [...turmas];
+    if (!novasTurmas[index].alunos) novasTurmas[index].alunos = [];
+    novasTurmas[index].alunos.push(usuarioLogado.email);
+
+    setTurmas(novasTurmas);
+    localStorage.setItem('turmas', JSON.stringify(novasTurmas));
+
+    alert(`Inscrição na turma "${turma.nomeTurma}" confirmada.`);
+  };
+
   const contatarProfessor = () => {
     if (artesSelecionadas.length === 0) {
       alert('Por favor, selecione ao menos uma arte marcial para contatar o professor.');
@@ -78,6 +97,13 @@ function DashboardAluno({ usuarioLogado, setUsuarioLogado }) {
     const mensagem = prompt(`Digite a mensagem para o(a) ${professor}:`);
 
     if (mensagem && mensagem.trim() !== '') {
+      const novasMensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
+      novasMensagens.push({
+        de: usuarioLogado.nome,
+        texto: mensagem.trim(),
+        paraModalidade: arteEscolhida,
+      });
+      localStorage.setItem('mensagens', JSON.stringify(novasMensagens));
       alert(`Mensagem enviada para ${professor}:\n"${mensagem}"`);
     } else {
       alert('Mensagem vazia. Operação cancelada.');
@@ -102,7 +128,7 @@ function DashboardAluno({ usuarioLogado, setUsuarioLogado }) {
     }
   };
 
-  if (!usuarioLogado) return null; // enquanto redireciona
+  if (!usuarioLogado) return null;
 
   return (
     <div>
@@ -135,19 +161,36 @@ function DashboardAluno({ usuarioLogado, setUsuarioLogado }) {
           </form>
         </section>
 
+        <section>
+          <h3>Filtrar turmas por arte marcial</h3>
+          <select onChange={e => setModalidadeFiltro(e.target.value)} value={modalidadeFiltro}>
+            <option value="">Todas</option>
+            {artesSelecionadas.map((arte, i) => (
+              <option key={i} value={arte}>{arte}</option>
+            ))}
+          </select>
+        </section>
+
         <section className="turmas-disponiveis">
           <h3>Turmas Disponíveis</h3>
           <ul>
-            {turmas.length === 0 ? (
+            {turmas.filter(t => !modalidadeFiltro || t.modalidade === modalidadeFiltro).length === 0 ? (
               <li>Nenhuma turma cadastrada.</li>
             ) : (
-              turmas.map((turma, index) => (
-                <li key={index}>
-                  <strong>Turma de {turma.modalidade}</strong><br />
-                  Nome: {turma.nomeTurma}<br />
-                  Horário: {turma.horarioInicio} às {turma.horarioFim}
-                </li>
-              ))
+              turmas
+                .filter(t => !modalidadeFiltro || t.modalidade === modalidadeFiltro)
+                .map((turma, index) => (
+                  <li key={index}>
+                    <strong>Turma de {turma.modalidade}</strong><br />
+                    Nome: {turma.nomeTurma}<br />
+                    Horário: {turma.horarioInicio} às {turma.horarioFim}<br />
+                    {turma.alunos?.includes(usuarioLogado.email) ? (
+                      <em>Inscrito</em>
+                    ) : (
+                      <button onClick={() => inscreverNaTurma(index)}>Inscrever-se</button>
+                    )}
+                  </li>
+                ))
             )}
           </ul>
         </section>
